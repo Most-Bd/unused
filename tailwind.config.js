@@ -15,9 +15,13 @@ module.exports = {
       },
     },
     colors: {
+      ...defaultTheme.colors,
       darkGreen: "#0e3329",
       lightGreen: "#37cca2",
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
+  variants: {
+    scrollbar: ["rounded"],
+  },
 };

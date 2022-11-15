@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply !scrollbar-thin !scrollbar-track-lightGreen/70 !scrollbar-thumb-darkGreen !scrollbar-thumb-rounded-full;
+  }
+}
+
 @layer components {
   .link-underline {
     border-bottom-width: 0;

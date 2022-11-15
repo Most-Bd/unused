@@ -5,6 +5,7 @@ import cropped_logo from "../assets/unused_cropped_transparent.png";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,7 +29,7 @@ const Header = () => {
         isScrolled ? "bg-lightGreen/90" : "bg-lightGreen"
       }  py-3 px-4 rounded-b-2xl fixed top-0 z-50 md:h-28 md:py-4`}
     >
-      <div className="w-full mx-auto md:w-[90%] lg:w-[75%] xl:w-[1024px] flex items-center justify-between">
+      <div className="w-full mx-auto md:w-[90%] lg:w-[75%] xl:w-[1080px] flex items-center justify-between">
         <Link href="/">
           <Image
             src={cropped_logo}
@@ -36,7 +37,27 @@ const Header = () => {
             className="w-36 cursor-pointer md:w-40"
           />
         </Link>
-        <ul className="flex flex-row justify-around items-center space-x-6 mr-2 md:space-x-8">
+        <div
+          className="space-y-1.5 transition-all duration-500 ease-in-out md:hidden cursor-pointer"
+          onClick={() => setMenuOpen((prev) => !prev)}
+        >
+          <span
+            className={`block w-8 h-1 bg-darkGreen rounded-lg transition-all duration-500 ease-in-out ${
+              menuOpen ? "-rotate-45 translate-y-2.5" : "rotate-0"
+            }`}
+          ></span>
+          <span
+            className={`block w-8 h-1 bg-darkGreen rounded-lg transition-all duration-500 ease-in-out ${
+              menuOpen ? "opacity-0" : "opacity-100"
+            }`}
+          ></span>
+          <span
+            className={`block w-8 h-1 bg-darkGreen rounded-lg transition-all duration-500 ease-in-out ${
+              menuOpen ? "rotate-45 -translate-y-2.5" : "rotate-0"
+            }`}
+          ></span>
+        </div>
+        <ul className="hidden flex-row justify-around items-center space-x-6 mr-2 md:flex md:space-x-8">
           <Link href="/">
             <li className="font-serif font-semibold text-darkGreen tracking-widest text-lg cursor-pointer md:text-xl link-underline link-underline-black text-black">
               Home
