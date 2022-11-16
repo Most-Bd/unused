@@ -27,6 +27,7 @@ const Banner = () => {
         src={bannerImage}
         alt="Banned image"
         fill={fill}
+        priority
         className="object-cover rounded-b-2xl -z-10 max-h-[85vh]"
       />
       <div className="relative my-4 w-[90%] mx-auto md:top-[40vh] lg:w-[75%]">
@@ -36,7 +37,12 @@ const Banner = () => {
         </h1>
       </div>
       <Link
-        href="/products"
+        href={{
+          pathname: "/products",
+          query: {
+            type: "all",
+          },
+        }}
         className="w-[90%] md:absolute md:top-[60vh] lg:top-[70vh]"
       >
         <button className="block font-sans rounded-2xl bg-lightGreen/80 p-4 mx-auto text-darkGreen text-center text-xl font-bold transition-all duration-300 md:text-2xl md:mr-0 lg:mr-28 hover:bg-lightGreen hover:scale-105">

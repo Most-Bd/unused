@@ -24,10 +24,10 @@ const Home = () => {
           <h1 className="font-serif font-semibold tracking-wider text-center text-3xl mb-8">
             Our Collections
           </h1>
-          <div className="w-full mx-auto px-4 flex flex-col sm:flex-row sm:flex-wrap   md:w-[90%] lg:w-[75%] xl:w-[1280px]">
+          <div className="w-full mx-auto px-4 flex flex-col sm:flex-row sm:flex-wrap md:w-[90%] lg:w-[75%] xl:w-[1280px]">
             {collections.map((collection) => (
               <Card
-                id={collection.id}
+                key={collection.key}
                 name={collection.name}
                 imgUrl={collection.imgUrl}
                 toUrl={collection.toUrl}
