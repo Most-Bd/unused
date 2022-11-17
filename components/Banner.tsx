@@ -43,6 +43,7 @@ const Banner = () => {
             type: "all",
           },
         }}
+        as="/products?type=all"
         className="w-[90%] md:absolute md:top-[60vh] lg:top-[70vh]"
       >
         <button className="block font-sans rounded-2xl bg-lightGreen/80 p-4 mx-auto text-darkGreen text-center text-xl font-bold transition-all duration-300 md:text-2xl md:mr-0 lg:mr-28 hover:bg-lightGreen hover:scale-105">

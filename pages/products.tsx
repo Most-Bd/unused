@@ -1,6 +1,9 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
+import ProductCard from "../components/ProductCard";
+import requests from "../utils/request";
+import Product from "../utils/types";
 
 interface Context {
   query: {
@@ -10,19 +13,64 @@ interface Context {
 
 interface Props {
   type: string;
+  mensShirts: Product[];
+  mensShoes: Product[];
+  womensDresses: Product[];
+  womensShoes: Product[];
 }
 
-const Products = (props: Props) => {
-  const [types, setTypes] = useState("all");
+const Products = ({
+  type,
+  mensShirts,
+  mensShoes,
+  womensDresses,
+  womensShoes,
+}: Props) => {
+  const [productType, setProductType] = useState("all");
+  const [sortOption, setSortOption] = useState("newest");
+  const [producstToMap, setProducstToMap] = useState<Product[] | null>([]);
+  const [resultCount, setResultCount] = useState(0);
+
+  console.log([...mensShirts, ...mensShoes, ...womensDresses, ...womensShoes]);
 
   useEffect(() => {
-    setTypes(props.type);
+    let isMounted = true;
+    if (isMounted) {
+      setProductType(type);
+
+      switch (productType) {
+        case "all":
+          setProducstToMap([
+            ...mensShirts,
+            ...mensShoes,
+            ...womensDresses,
+            ...womensShoes,
+          ]);
+          break;
+        case "mens-shirts":
+          setProducstToMap(mensShirts);
+          break;
+        case "mens-shoes":
+          setProducstToMap(mensShoes);
+          break;
+        case "womens-dresses":
+          setProducstToMap(womensDresses);
+          break;
+        case "womens-shoes":
+          setProducstToMap(womensShoes);
+          break;
+      }
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
     <div>
       <Head>
-        <title>Unused | Products </title>
+        <title>Unused | Products</title>
         <meta
           name="description"
           content="Web App for a second-hand clothes selling store"
@@ -30,14 +78,108 @@ const Products = (props: Props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
+
+      <main className="overflow-x-hidden min-h-[100vh]">
+        <h1 className="mx-auto w-[90%] font-bold text-center text-3xl sm:text-4xl mt-36 tracking-wider leading-normal md:w-[700px] md:text-[40px] md:leading-normal">
+          High Quality Second-hand Clothes with the Best Prices
+        </h1>
+        <div className="w-full mx-auto md:w-[90%] lg:w-[75%] xl:w-[1280px]">
+          {/* Filtering div */}
+          <div className="flex mx-auto items-end">
+            <p className="hidden w-[15%] font-serif font-semibold text-darkGreen text-xl tracking-wider mb-2 ml-4 md:inline">
+              {resultCount} Results
+            </p>
+            <div className="flex justify-between items-center space-x-8 mt-4 mx-auto w-[90%] md:w-fit md:mr-4 md:justify-end">
+              <label
+                htmlFor="collection-select"
+                className="flex flex-col w-fit text-center text-xl font-serif font-semibold text-darkGreen tracking-wider"
+              >
+                Collection
+                <select
+                  name="collection"
+                  id="collection-select"
+                  className="py-2 px-2 w-fit mx-auto mt-2 border-2 border-darkGreen text-lg font-sans tracking-wide text-darkGreen cursor-pointer rounded-lg transition-all duration-300 focus:border-darkGreen/50"
+                  value={productType}
+                  onChange={(e) => setProductType(e.target.value)}
+                >
+                  <option value="all">All</option>
+                  <option value="mens-shirts">Men's Shirts</option>
+                  <option value="mens-shoes">Men's Shoes</option>
+                  <option value="momens-dresses">Women's Dresses</option>
+                  <option value="momen-shoes">Women's Shoes</option>
+                </select>
+              </label>
+              <label
+                htmlFor="sort-select"
+                className="flex flex-col w-fit text-center text-xl font-serif font-semibold text-darkGreen tracking-wider"
+              >
+                Sort by
+                <select
+                  name="sort"
+                  id="sort-select"
+                  className="py-2 px-2 w-fit mx-auto mt-2 border-2 border-darkGreen text-lg font-sans tracking-wide text-darkGreen cursor-pointer rounded-lg transition-all duration-300 focus:border-darkGreen/50"
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                >
+                  <option value="newest">Newest</option>
+                  <option value="low-to-high">Price: Low to High</option>
+                  <option value="high-to-low">Price: High to Low</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <hr className="hidden border border-darkGreen/30 rounded-2xl mt-3 md:block" />
+
+          {/* Products div */}
+          <div>
+            {producstToMap?.map((prod) => (
+              <ProductCard
+                id={prod.id}
+                title={prod.title}
+                description={prod.description}
+                price={prod.price}
+                discountPercentage={prod.discountPercentage}
+                rating={prod.rating}
+                stock={prod.stock}
+                brand={prod.brand}
+                category={prod.category}
+                thumbnail={prod.thumbnail}
+                images={prod.images}
+              />
+            ))}
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
 
-export const getServerSideProps = (context: Context) => {
+export const getServerSideProps = async (context: Context) => {
+  const [mensShirts, mensShoes, womensDresses, womensShoes] = await Promise.all(
+    [
+      fetch(requests.mensShirts)
+        .then((res) => res.json())
+        .catch((err) => console.log(err.message)),
+      fetch(requests.mensShoes)
+        .then((res) => res.json())
+        .catch((err) => console.log(err.message)),
+      fetch(requests.womensDresses)
+        .then((res) => res.json())
+        .catch((err) => console.log(err.message)),
+      fetch(requests.womensShoes)
+        .then((res) => res.json())
+        .catch((err) => console.log(err.message)),
+    ]
+  );
+
   return {
     props: {
       type: context.query.type,
+
+      mensShirts: mensShirts.products,
+      mensShoes: mensShoes.products,
+      womensDresses: womensDresses.products,
+      womensShoes: womensShoes.products,
     },
   };
 };

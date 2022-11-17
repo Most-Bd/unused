@@ -6,7 +6,7 @@ import Card from "../components/Card";
 
 const Home = () => {
   return (
-    <div className="scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-blue-300">
+    <div>
       <Head>
         <title>Unused | Best Second-hand Clothes Out There </title>
         <meta
@@ -15,7 +15,7 @@ const Home = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="overflow-x-hidden min-h-[100vh] ">
+      <main className="overflow-x-hidden min-h-[100vh]">
         <Header />
         <Banner />
 
