@@ -20,7 +20,10 @@ module.exports = {
       lightGreen: "#37cca2",
     },
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [
+    require("tailwind-scrollbar")({ nocompatible: true }),
+    require("@tailwindcss/line-clamp"),
+  ],
   variants: {
     scrollbar: ["rounded"],
   },

@@ -3,6 +3,7 @@ import Banner from "../components/Banner";
 import Header from "../components/Header";
 import collections from "../assets/collections";
 import Card from "../components/Card";
+import Footer from "../components/Footer";
 
 const Home = () => {
   return (
@@ -36,6 +37,8 @@ const Home = () => {
           </div>
         </section>
       </main>
+
+      <Footer />
     </div>
   );
 };

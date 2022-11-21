@@ -25,7 +25,7 @@ const Header = () => {
 
   return (
     <header
-      className={`w-full h-24 ${
+      className={`w-full h-20 ${
         isScrolled ? "bg-lightGreen/90" : "bg-lightGreen"
       }  py-3 px-4 rounded-b-2xl fixed top-0 z-50 md:h-28 md:py-4`}
     >
@@ -34,7 +34,7 @@ const Header = () => {
           <Image
             src={cropped_logo}
             alt="Unused logo"
-            className="w-36 cursor-pointer md:w-40"
+            className="w-28 cursor-pointer md:w-40"
           />
         </Link>
         <div
@@ -63,7 +63,15 @@ const Header = () => {
               Home
             </li>
           </Link>
-          <Link href="/products">
+          <Link
+            href={{
+              pathname: "/products",
+              query: {
+                type: "all",
+              },
+            }}
+            as="/products?type=all"
+          >
             <li className="font-serif font-semibold text-darkGreen tracking-widest text-lg cursor-pointer md:text-xl link-underline link-underline-black text-black">
               Products
             </li>

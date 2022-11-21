@@ -1,5 +1,7 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
 import requests from "../utils/request";
@@ -26,46 +28,62 @@ const Products = ({
   womensDresses,
   womensShoes,
 }: Props) => {
-  const [productType, setProductType] = useState("all");
+  const [productType, setProductType] = useState(type);
   const [sortOption, setSortOption] = useState("newest");
-  const [producstToMap, setProducstToMap] = useState<Product[] | null>([]);
+  const [productsToMap, setproductsToMap] = useState<Product[] | null>([]);
   const [resultCount, setResultCount] = useState(0);
 
-  console.log([...mensShirts, ...mensShoes, ...womensDresses, ...womensShoes]);
+  const router = useRouter();
 
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
       setProductType(type);
 
+      console.log(productType);
+
       switch (productType) {
         case "all":
-          setProducstToMap([
+          setproductsToMap([
             ...mensShirts,
             ...mensShoes,
             ...womensDresses,
             ...womensShoes,
           ]);
+          setResultCount(
+            [...mensShirts, ...mensShoes, ...womensDresses, ...womensShoes]
+              .length
+          );
+
           break;
         case "mens-shirts":
-          setProducstToMap(mensShirts);
+          setproductsToMap(mensShirts);
+          setResultCount(mensShirts.length);
           break;
         case "mens-shoes":
-          setProducstToMap(mensShoes);
+          setproductsToMap(mensShoes);
+          setResultCount(mensShoes.length);
           break;
         case "womens-dresses":
-          setProducstToMap(womensDresses);
+          setproductsToMap(womensDresses);
+          setResultCount(womensDresses.length);
           break;
         case "womens-shoes":
-          setProducstToMap(womensShoes);
+          setproductsToMap(womensShoes);
+          setResultCount(womensShoes.length);
           break;
       }
+
+      router.push({
+        pathname: "/products",
+        query: { type: productType },
+      });
     }
 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [productType]);
 
   return (
     <div>
@@ -92,13 +110,13 @@ const Products = ({
             <div className="flex justify-between items-center space-x-8 mt-4 mx-auto w-[90%] md:w-fit md:mr-4 md:justify-end">
               <label
                 htmlFor="collection-select"
-                className="flex flex-col w-fit text-center text-xl font-serif font-semibold text-darkGreen tracking-wider"
+                className="flex flex-col w-fit text-center text-lg font-serif font-semibold text-darkGreen tracking-wider md:text-xl"
               >
                 Collection
                 <select
                   name="collection"
                   id="collection-select"
-                  className="py-2 px-2 w-fit mx-auto mt-2 border-2 border-darkGreen text-lg font-sans tracking-wide text-darkGreen cursor-pointer rounded-lg transition-all duration-300 focus:border-darkGreen/50"
+                  className="py-2 px-2 w-fit mx-auto mt-2 border-2 border-darkGreen text-sm font-sans tracking-wide text-darkGreen cursor-pointer rounded-lg transition-all duration-300 md:text-lg focus:border-darkGreen/50"
                   value={productType}
                   onChange={(e) => setProductType(e.target.value)}
                 >
@@ -111,13 +129,13 @@ const Products = ({
               </label>
               <label
                 htmlFor="sort-select"
-                className="flex flex-col w-fit text-center text-xl font-serif font-semibold text-darkGreen tracking-wider"
+                className="flex flex-col w-fit text-center text-lg font-serif font-semibold text-darkGreen tracking-wider md:text-xl"
               >
                 Sort by
                 <select
                   name="sort"
                   id="sort-select"
-                  className="py-2 px-2 w-fit mx-auto mt-2 border-2 border-darkGreen text-lg font-sans tracking-wide text-darkGreen cursor-pointer rounded-lg transition-all duration-300 focus:border-darkGreen/50"
+                  className="py-2 px-2 w-fit mx-auto mt-2 border-2 border-darkGreen text-sm font-sans tracking-wide text-darkGreen cursor-pointer rounded-lg transition-all duration-300 md:text-lg  focus:border-darkGreen/50"
                   value={sortOption}
                   onChange={(e) => setSortOption(e.target.value)}
                 >
@@ -131,25 +149,31 @@ const Products = ({
           <hr className="hidden border border-darkGreen/30 rounded-2xl mt-3 md:block" />
 
           {/* Products div */}
-          <div>
-            {producstToMap?.map((prod) => (
-              <ProductCard
-                id={prod.id}
-                title={prod.title}
-                description={prod.description}
-                price={prod.price}
-                discountPercentage={prod.discountPercentage}
-                rating={prod.rating}
-                stock={prod.stock}
-                brand={prod.brand}
-                category={prod.category}
-                thumbnail={prod.thumbnail}
-                images={prod.images}
-              />
-            ))}
+          <div className="grid grid-cols-1 justify-items-center sm:grid-cols-2 xl:grid-cols-3">
+            {productsToMap?.map(
+              (prod) =>
+                prod.stock && (
+                  <ProductCard
+                    key={prod.id}
+                    id={prod.id}
+                    title={prod.title}
+                    description={prod.description}
+                    price={prod.price}
+                    discountPercentage={prod.discountPercentage}
+                    rating={prod.rating}
+                    stock={prod.stock}
+                    brand={prod.brand}
+                    category={prod.category}
+                    thumbnail={prod.thumbnail}
+                    images={prod.images}
+                  />
+                )
+            )}
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 };
@@ -174,12 +198,12 @@ export const getServerSideProps = async (context: Context) => {
 
   return {
     props: {
-      type: context.query.type,
+      type: context.query.type || "all",
 
-      mensShirts: mensShirts.products,
-      mensShoes: mensShoes.products,
-      womensDresses: womensDresses.products,
-      womensShoes: womensShoes.products,
+      mensShirts: mensShirts.products || [],
+      mensShoes: mensShoes.products || [],
+      womensDresses: womensDresses.products || [],
+      womensShoes: womensShoes.products || [],
     },
   };
 };
