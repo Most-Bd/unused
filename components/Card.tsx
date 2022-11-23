@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Collection } from "../assets/collections";
 import { useRecoilState } from "recoil";
 import { categoryTypeState } from "../utils/recoilAtom";
@@ -8,16 +8,17 @@ import { useRouter } from "next/router";
 
 const Card = ({ name, imgUrl, toUrl }: Collection) => {
   const [categoryType, setCategoryType] = useRecoilState(categoryTypeState);
+  const [isMounted, setIsMounted] = useState(true);
+
   const router = useRouter();
 
   useEffect(() => {
-    var isMounted = true;
     if (isMounted) {
       setCategoryType(toUrl);
     }
 
     return () => {
-      isMounted = false;
+      setIsMounted(false);
     };
   }, []);
 

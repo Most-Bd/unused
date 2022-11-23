@@ -25,12 +25,12 @@ const Products = ({
   const [sortOption, setSortOption] = useState("newest");
   const [productsToMap, setproductsToMap] = useState<Product[] | null>([]);
   const [resultCount, setResultCount] = useState(0);
+  const [isMounted, setIsMounted] = useState(true);
 
   const [categoryType, setCategoryType] = useRecoilState(categoryTypeState);
 
   // Controlling what items are displayed based on their category
   useEffect(() => {
-    var isMounted = true;
     if (isMounted) {
       setCategoryType(categoryType);
 
@@ -70,7 +70,7 @@ const Products = ({
     }
 
     return () => {
-      isMounted = false;
+      setIsMounted(false);
     };
   }, [categoryType]);
 
