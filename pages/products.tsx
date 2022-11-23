@@ -31,6 +31,7 @@ const Products = ({
 
   // Controlling what items are displayed based on their category
   useEffect(() => {
+    setIsMounted(true);
     if (isMounted) {
       setCategoryType(categoryType);
 

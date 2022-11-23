@@ -13,6 +13,7 @@ const Card = ({ name, imgUrl, toUrl }: Collection) => {
   const router = useRouter();
 
   useEffect(() => {
+    setIsMounted(true);
     if (isMounted) {
       setCategoryType(toUrl);
     }
