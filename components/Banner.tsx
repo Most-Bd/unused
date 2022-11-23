@@ -1,10 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { categoryTypeState } from "../utils/recoilAtom";
 import bannerImage from "../assets/prudence-earl-8F0I12ypHPA-unsplash.jpg";
+import { useRouter } from "next/router";
 
 const Banner = () => {
   const [fill, setFill] = useState(true);
+  const [categoryType, setCategoryType] = useRecoilState(categoryTypeState);
+  const router = useRouter();
 
   useEffect(() => {
     const handleResize = () => {
@@ -21,6 +26,11 @@ const Banner = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const handleClick = () => {
+    setCategoryType("all");
+    router.push("/products");
+  };
+
   return (
     <div className="relative top-0 left-0 w-screen md:min-h-[90vh]">
       <Image
@@ -36,20 +46,14 @@ const Banner = () => {
           <div className="hidden md:block absolute w-96 h-24 bg-lightGreen/80 -z-10 rounded-[50%] top-0 right-8 scale-x-125 skew-y-[4deg] scale-y-150 drop-shadow-lg lg:w-[36rem] lg:h-[10rem] lg:right-2 lg:scale-y-[1.3]"></div>
         </h1>
       </div>
-      <Link
-        href={{
-          pathname: "/products",
-          query: {
-            type: "all",
-          },
-        }}
-        as="/products?type=all"
-        className="w-[90%] md:absolute md:top-[60vh] lg:top-[70vh]"
+      <div
+        className="w-[90%] mx-auto md:absolute md:top-[60vh] lg:top-[70vh]"
+        onClick={handleClick}
       >
         <button className="block font-sans rounded-2xl bg-lightGreen/80 p-4 mx-auto text-darkGreen text-center text-xl font-bold transition-all duration-300 md:text-2xl md:mr-0 lg:mr-28 hover:bg-lightGreen hover:scale-105">
           CHECK OUT OUR PRODUCTS
         </button>
-      </Link>
+      </div>
     </div>
   );
 };

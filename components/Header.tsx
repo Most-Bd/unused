@@ -1,11 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import cropped_logo from "../assets/unused_cropped_transparent.png";
+import { categoryTypeState } from "../utils/recoilAtom";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [categoryType, setCategoryType] = useRecoilState(categoryTypeState);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +27,11 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const handleClick = () => {
+    setCategoryType("all");
+    router.push("/products");
+  };
 
   return (
     <header
@@ -63,19 +73,11 @@ const Header = () => {
               Home
             </li>
           </Link>
-          <Link
-            href={{
-              pathname: "/products",
-              query: {
-                type: "all",
-              },
-            }}
-            as="/products?type=all"
-          >
+          <div onClick={handleClick}>
             <li className="font-serif font-semibold text-darkGreen tracking-widest text-lg cursor-pointer md:text-xl link-underline link-underline-black text-black">
               Products
             </li>
-          </Link>
+          </div>
           <Link href="/about">
             <li className="font-serif font-semibold text-darkGreen tracking-widest text-lg cursor-pointer md:text-xl link-underline link-underline-black text-black">
               About

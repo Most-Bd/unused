@@ -1,20 +1,15 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
+import { categoryTypeState } from "../utils/recoilAtom";
 import requests from "../utils/request";
 import Product from "../utils/types";
 
-interface Context {
-  query: {
-    type: string;
-  };
-}
-
 interface Props {
-  type: string;
   mensShirts: Product[];
   mensShoes: Product[];
   womensDresses: Product[];
@@ -22,27 +17,26 @@ interface Props {
 }
 
 const Products = ({
-  type,
   mensShirts,
   mensShoes,
   womensDresses,
   womensShoes,
 }: Props) => {
-  const [productType, setProductType] = useState(type);
   const [sortOption, setSortOption] = useState("newest");
   const [productsToMap, setproductsToMap] = useState<Product[] | null>([]);
   const [resultCount, setResultCount] = useState(0);
 
-  const router = useRouter();
+  const [categoryType, setCategoryType] = useRecoilState(categoryTypeState);
 
+  // Controlling what items are displayed based on their category
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
-      setProductType(type);
+      setCategoryType(categoryType);
 
-      console.log(productType);
+      console.log(categoryType);
 
-      switch (productType) {
+      switch (categoryType) {
         case "all":
           setproductsToMap([
             ...mensShirts,
@@ -73,17 +67,20 @@ const Products = ({
           setResultCount(womensShoes.length);
           break;
       }
-
-      router.push({
-        pathname: "/products",
-        query: { type: productType },
-      });
     }
 
     return () => {
       isMounted = false;
     };
-  }, [productType]);
+  }, [categoryType]);
+
+  // Sorting the items
+  useEffect(() => {
+    // To change
+    if (sortOption === "newest") {
+      setproductsToMap(mensShirts);
+    }
+  }, [sortOption]);
 
   return (
     <div>
@@ -117,14 +114,14 @@ const Products = ({
                   name="collection"
                   id="collection-select"
                   className="py-2 px-2 w-fit mx-auto mt-2 border-2 border-darkGreen text-sm font-sans tracking-wide text-darkGreen cursor-pointer rounded-lg transition-all duration-300 md:text-lg focus:border-darkGreen/50"
-                  value={productType}
-                  onChange={(e) => setProductType(e.target.value)}
+                  value={categoryType}
+                  onChange={(e) => setCategoryType(e.target.value)}
                 >
                   <option value="all">All</option>
                   <option value="mens-shirts">Men's Shirts</option>
                   <option value="mens-shoes">Men's Shoes</option>
-                  <option value="momens-dresses">Women's Dresses</option>
-                  <option value="momen-shoes">Women's Shoes</option>
+                  <option value="womens-dresses">Women's Dresses</option>
+                  <option value="women-shoes">Women's Shoes</option>
                 </select>
               </label>
               <label
@@ -178,7 +175,7 @@ const Products = ({
   );
 };
 
-export const getServerSideProps = async (context: Context) => {
+export const getServerSideProps = async () => {
   const [mensShirts, mensShoes, womensDresses, womensShoes] = await Promise.all(
     [
       fetch(requests.mensShirts)
@@ -198,8 +195,6 @@ export const getServerSideProps = async (context: Context) => {
 
   return {
     props: {
-      type: context.query.type || "all",
-
       mensShirts: mensShirts.products || [],
       mensShoes: mensShoes.products || [],
       womensDresses: womensDresses.products || [],
