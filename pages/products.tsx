@@ -121,7 +121,7 @@ const Products = ({
                   <option value="mens-shirts">Men's Shirts</option>
                   <option value="mens-shoes">Men's Shoes</option>
                   <option value="womens-dresses">Women's Dresses</option>
-                  <option value="women-shoes">Women's Shoes</option>
+                  <option value="womens-shoes">Women's Shoes</option>
                 </select>
               </label>
               <label
