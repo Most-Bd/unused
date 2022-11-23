@@ -78,7 +78,7 @@ const Products = ({
   useEffect(() => {
     // To change
     if (sortOption === "newest") {
-      setproductsToMap(mensShirts);
+      console.log("Sorting");
     }
   }, [sortOption]);
 
