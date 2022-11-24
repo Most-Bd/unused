@@ -1,6 +1,9 @@
 import Image from "next/image";
 import Product from "../utils/types";
 import brandImg from "../assets/brand.png";
+import { useRecoilState } from "recoil";
+import { modalState } from "../utils/recoilAtom";
+import ProductModal from "./ProductModal";
 
 const ProductCard = ({
   id,
@@ -15,17 +18,26 @@ const ProductCard = ({
   thumbnail,
   images,
 }: Product) => {
+  const [showModal, setShowModal] = useRecoilState(modalState);
+
+  const handleOpen = () => setShowModal(true);
+
   return (
-    <div className="group h-[30rem] w-[20rem] my-4 rounded-xl border-2 border-darkGreen/40 bg-lightGreen/20 cursor-pointer transition-all duration-300 hover:bg-lightGreen/50">
+    <div
+      className="group h-[30rem] w-[20rem] my-4 rounded-xl border-2 border-darkGreen/40 bg-lightGreen/20 cursor-pointer transition-all duration-300 hover:bg-lightGreen/50"
+      onClick={handleOpen}
+    >
+      <ProductModal />
       <div className="mx-auto relative transition-all duration-300 ease-in-out h-[12rem] w-[12rem] md:w-[14rem]">
         <Image
           src={thumbnail}
           alt={title}
           fill
           className="object-cover mt-4 rounded-2xl"
+          sizes="(max-width: 500px)"
         />
       </div>
-      <p className="mt-10 font-bold w-[80%] block mx-auto text-xl text-center tracking-widest text-darkGreen uppercase h-[4rem] line-clamp-2">
+      <p className="mt-10 font-bold w-[85%] block mx-auto text-xl text-center tracking-widest text-darkGreen uppercase h-[4rem] line-clamp-2">
         {title}
       </p>
       <p className="mt-1 block mx-auto text-center text-lg line-clamp-2 w-[80%] text-darkGreen h-[3.4rem]">

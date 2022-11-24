@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import Footer from "../components/Footer";
@@ -22,20 +21,37 @@ const Products = ({
   womensDresses,
   womensShoes,
 }: Props) => {
-  const [sortOption, setSortOption] = useState("newest");
-  const [productsToMap, setproductsToMap] = useState<Product[] | null>([]);
+  const [sortOption, setSortOption] = useState("low-to-high");
+  const [productsToMap, setproductsToMap] = useState<Product[]>([]);
   const [resultCount, setResultCount] = useState(0);
   const [isMounted, setIsMounted] = useState(true);
 
   const [categoryType, setCategoryType] = useRecoilState(categoryTypeState);
 
-  // Controlling what items are displayed based on their category
+  // Custom sort function because the default didn't work (typescript error)
+  const customSort = (
+    prod_1: Product,
+    prod_2: Product,
+    sortOp: string
+  ): number => {
+    if (sortOp === "low-to-high") {
+      if (prod_1.price > prod_2.price) return 1;
+      if (prod_1.price < prod_2.price) return -1;
+      else return 0;
+    } else if (sortOp === "high-to-low") {
+      if (prod_1.price < prod_2.price) return 1;
+      if (prod_1.price > prod_2.price) return -1;
+      else return 0;
+    } else {
+      return 0;
+    }
+  };
+
+  // Controlling what items are displayed based on their category and the sorting option
   useEffect(() => {
     setIsMounted(true);
     if (isMounted) {
       setCategoryType(categoryType);
-
-      console.log(categoryType);
 
       switch (categoryType) {
         case "all":
@@ -68,20 +84,25 @@ const Products = ({
           setResultCount(womensShoes.length);
           break;
       }
+
+      switch (sortOption) {
+        case "low-to-high":
+          setproductsToMap((prev) => [
+            ...prev.sort((p_1, p_2) => customSort(p_1, p_2, sortOption)),
+          ]);
+          break;
+        case "high-to-low":
+          setproductsToMap((prev) => [
+            ...prev.sort((p_1, p_2) => customSort(p_1, p_2, sortOption)),
+          ]);
+          break;
+      }
     }
 
     return () => {
       setIsMounted(false);
     };
-  }, [categoryType]);
-
-  // Sorting the items
-  useEffect(() => {
-    // To change
-    if (sortOption === "newest") {
-      console.log("Sorting");
-    }
-  }, [sortOption]);
+  }, [categoryType, sortOption]);
 
   return (
     <div>
@@ -95,8 +116,8 @@ const Products = ({
       </Head>
       <Header />
 
-      <main className="overflow-x-hidden min-h-[100vh]">
-        <h1 className="mx-auto w-[90%] font-bold text-center text-3xl sm:text-4xl mt-36 tracking-wider leading-normal md:w-[700px] md:text-[40px] md:leading-normal">
+      <main className="overflow-x-hidden min-h-[100vh] mb-4">
+        <h1 className="mx-auto w-[90%] font-bold text-center text-3xl mt-32 tracking-wider leading-normal sm:mt-36 sm:text-4xl md:w-[700px] md:text-[40px] md:leading-normal">
           High Quality Second-hand Clothes with the Best Prices
         </h1>
         <div className="w-full mx-auto md:w-[90%] lg:w-[75%] xl:w-[1280px]">
@@ -137,7 +158,6 @@ const Products = ({
                   value={sortOption}
                   onChange={(e) => setSortOption(e.target.value)}
                 >
-                  <option value="newest">Newest</option>
                   <option value="low-to-high">Price: Low to High</option>
                   <option value="high-to-low">Price: High to Low</option>
                 </select>

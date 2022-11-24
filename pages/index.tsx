@@ -16,7 +16,7 @@ const Home = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="overflow-x-hidden min-h-[100vh]">
+      <main className="overflow-x-hidden min-h-[100vh] mb-8">
         <Header />
         <Banner />
 
