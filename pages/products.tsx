@@ -1,10 +1,12 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
-import { categoryTypeState } from "../utils/recoilAtom";
+import ProductModal from "../components/ProductModal";
+import ScrollButton from "../components/ScrollButton";
+import { categoryTypeState, modalState } from "../utils/recoilAtom";
 import requests from "../utils/request";
 import Product from "../utils/types";
 
@@ -27,6 +29,7 @@ const Products = ({
   const [isMounted, setIsMounted] = useState(true);
 
   const [categoryType, setCategoryType] = useRecoilState(categoryTypeState);
+  const showModal = useRecoilValue(modalState);
 
   // Custom sort function because the default didn't work (typescript error)
   const customSort = (
@@ -105,7 +108,7 @@ const Products = ({
   }, [categoryType, sortOption]);
 
   return (
-    <div>
+    <div className={`${showModal && "!h-screen overflow-hidden"}`}>
       <Head>
         <title>Unused | Products</title>
         <meta
@@ -114,9 +117,13 @@ const Products = ({
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <ScrollButton />
       <Header />
 
-      <main className="overflow-x-hidden min-h-[100vh] mb-4">
+      <ProductModal />
+
+      <main className="first-letter:overflow-x-hidden min-h-[100vh] mb-4">
         <h1 className="mx-auto w-[90%] font-bold text-center text-3xl mt-32 tracking-wider leading-normal sm:mt-36 sm:text-4xl md:w-[700px] md:text-[40px] md:leading-normal">
           High Quality Second-hand Clothes with the Best Prices
         </h1>

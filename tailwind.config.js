@@ -23,6 +23,7 @@ module.exports = {
   plugins: [
     require("tailwind-scrollbar")({ nocompatible: true }),
     require("@tailwindcss/line-clamp"),
+    require("tailwind-scrollbar-hide"),
   ],
   variants: {
     scrollbar: ["rounded"],

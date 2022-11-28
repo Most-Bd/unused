@@ -9,7 +9,7 @@ interface Product {
   brand: string;
   category: string;
   thumbnail: string;
-  images: string[] | string;
+  images: string[];
 }
 
 export default Product;

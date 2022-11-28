@@ -2,8 +2,7 @@ import Image from "next/image";
 import Product from "../utils/types";
 import brandImg from "../assets/brand.png";
 import { useRecoilState } from "recoil";
-import { modalState } from "../utils/recoilAtom";
-import ProductModal from "./ProductModal";
+import { modalState, productState } from "../utils/recoilAtom";
 
 const ProductCard = ({
   id,
@@ -19,15 +18,30 @@ const ProductCard = ({
   images,
 }: Product) => {
   const [showModal, setShowModal] = useRecoilState(modalState);
+  const [productForModal, setProductForModal] = useRecoilState(productState);
 
-  const handleOpen = () => setShowModal(true);
+  const handleOpen = () => {
+    setProductForModal({
+      id,
+      title,
+      description,
+      price,
+      discountPercentage,
+      rating,
+      stock,
+      brand,
+      category,
+      thumbnail,
+      images,
+    });
+    setShowModal(true);
+  };
 
   return (
     <div
       className="group h-[30rem] w-[20rem] my-4 rounded-xl border-2 border-darkGreen/40 bg-lightGreen/20 cursor-pointer transition-all duration-300 hover:bg-lightGreen/50"
       onClick={handleOpen}
     >
-      <ProductModal />
       <div className="mx-auto relative transition-all duration-300 ease-in-out h-[12rem] w-[12rem] md:w-[14rem]">
         <Image
           src={thumbnail}

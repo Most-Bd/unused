@@ -48,7 +48,7 @@ const Header = () => {
           />
         </Link>
         <div
-          className="space-y-1.5 transition-all duration-500 ease-in-out md:hidden cursor-pointer"
+          className="space-y-1.5 transition-all duration-500 ease-in-out md:hidden cursor-pointer h-10 p-1"
           onClick={() => setMenuOpen((prev) => !prev)}
         >
           <span

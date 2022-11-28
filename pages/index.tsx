@@ -4,6 +4,8 @@ import Header from "../components/Header";
 import collections from "../assets/collections";
 import Card from "../components/Card";
 import Footer from "../components/Footer";
+import ConatctForm from "../components/ConatctForm";
+import ScrollButton from "../components/ScrollButton";
 
 const Home = () => {
   return (
@@ -16,8 +18,11 @@ const Home = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <ScrollButton />
+      <Header />
+
       <main className="overflow-x-hidden min-h-[100vh] mb-8">
-        <Header />
         <Banner />
 
         {/* Collections section */}
@@ -37,6 +42,9 @@ const Home = () => {
           </div>
         </section>
       </main>
+
+      {/* Add contact section */}
+      <ConatctForm />
 
       <Footer />
     </div>

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import ScrollButton from "../components/ScrollButton";
 import { categoryTypeState } from "../utils/recoilAtom";
 
 const About = () => {
@@ -24,7 +25,10 @@ const About = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <ScrollButton />
       <Header />
+
       <main className="overflow-x-hidden grow w-full mx-auto mb-8 md:w-[90%] lg:w-[75%] xl:w-[1280px] mt-28 text-center sm:mt-32">
         <h1 className="font-serif text-4xl tracking-widest font-bold text-darkGreen">
           ABOUT US

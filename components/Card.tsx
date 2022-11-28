@@ -38,6 +38,7 @@ const Card = ({ name, imgUrl, toUrl }: Collection) => {
           src={imgUrl}
           alt={name}
           fill
+          priority
           className="object-cover rounded-2xl"
           sizes="(max-width: 500px)"
         />
