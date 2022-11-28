@@ -21,7 +21,7 @@ const ScrollButton = () => {
 
   return (
     <button
-      className={`fixed flex border-2 border-darkGreen z-50 bottom-8 right-10 transition-all duration-500 ${
+      className={`fixed flex border-2 border-darkGreen z-40 bottom-8 right-10 transition-all duration-500 ${
         isScrolled ? "opacity-100" : "opacity-0"
       } items-center justify-center p-2 w-12 h-12 bg-lightGreen rounded-full hover:scale-110`}
       disabled={!isScrolled}
